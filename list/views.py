@@ -1,0 +1,70 @@
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+
+from .forms import TaskForm
+from .models import Task, Tag
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+
+
+class TodoListView(ListView):
+    model = Task
+    template_name = "todolist_templates/index.html"
+    context_object_name = "tasks"
+
+    def get_queryset(self):
+        return Task.objects.prefetch_related("tags")
+
+
+class TagsListView(ListView):
+    model = Tag
+    template_name = 'todolist_templates/tags.html'
+    context_object_name = 'tags'
+
+
+class AddTagsView(CreateView):
+    model = Tag
+    fields = ['name']
+    success_url = reverse_lazy('todolist_templates:tags')
+    template_name = "todolist_templates/add_tags.html"
+
+
+class UpdateTagsView(UpdateView):
+    model = Tag
+    fields = ['name']
+    success_url = reverse_lazy('todolist_templates:tags')
+    template_name = "todolist_templates/add_tags.html"
+
+
+class DeleteTagsView(DeleteView):
+    model = Tag
+    success_url = reverse_lazy('todolist_templates:tags')
+    template_name = "todolist_templates/delete_tags.html"
+
+class AddTask(CreateView):
+    model = Task
+    form_class = TaskForm
+    template_name = "todolist_templates/add_task.html"
+    success_url = reverse_lazy("todolist_templates:index")
+
+
+class UpdateTaskView(UpdateView):
+    model = Task
+    form_class = TaskForm
+    template_name = "todolist_templates/add_task.html"
+    success_url = reverse_lazy("todolist_templates:index")
+
+
+class DeleteTaskView(DeleteView):
+    model = Task
+    template_name = "todolist_templates/delete_task.html"
+
+
+def toggle_done(request, pk):
+    task = Task.objects.get(pk=pk)
+    if task.is_done:
+        task.is_done = False
+    else:
+        task.is_done = True
+    task.save()
+
+    return HttpResponseRedirect(reverse_lazy('todolist_templates:index'))
