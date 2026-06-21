@@ -20,7 +20,7 @@ urlpatterns = [
     path('toggle_status/<int:pk>/', toggle_done, name='toggle_status'),
 
     path('tags/', TagsListView.as_view(), name='tags'),
-    path('tags/add', AddTagsView.as_view(), name='add_tags'),
+    path('tags/add/', AddTagsView.as_view(), name='add_tags'),
     path('tags/<int:pk>/update/', UpdateTagsView.as_view(), name='tags_update'),
     path('tags/<int:pk>/delete/', DeleteTagsView.as_view(), name='tags_delete'),
 
