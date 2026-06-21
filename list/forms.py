@@ -16,8 +16,11 @@ class TaskForm(forms.ModelForm):
             "tags": forms.CheckboxSelectMultiple(attrs={
                 "class": "form-select",
             }),
-            "deadline": forms.DateInput(attrs={
-                "class": "form-control",
-                "type": "date",
-            }),
+            "deadline": forms.DateTimeInput(
+                attrs={
+                    "class": "form-control",
+                    "type": "datetime-local",
+                },
+                format="%Y-%m-%dT%H:%M",
+            )
         }

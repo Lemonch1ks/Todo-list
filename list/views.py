@@ -12,7 +12,7 @@ class TodoListView(ListView):
     context_object_name = "tasks"
 
     def get_queryset(self):
-        return Task.objects.prefetch_related("tags")
+        return Task.objects.prefetch_related("tags").order_by("is_done", "-date")
 
 
 class TagsListView(ListView):
@@ -57,6 +57,7 @@ class UpdateTaskView(UpdateView):
 class DeleteTaskView(DeleteView):
     model = Task
     template_name = "todolist_templates/delete_task.html"
+    success_url = reverse_lazy("todolist_templates:index")
 
 
 def toggle_done(request, pk):
