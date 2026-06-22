@@ -1,9 +1,10 @@
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 
-from .forms import TaskForm
-from .models import Task, Tag
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from list.forms import TaskForm
+from list.models import Task, Tag
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View
 
 
 class TodoListView(ListView):
@@ -60,12 +61,12 @@ class DeleteTaskView(DeleteView):
     success_url = reverse_lazy("todolist_templates:index")
 
 
-def toggle_done(request, pk):
-    task = Task.objects.get(pk=pk)
-    if task.is_done:
-        task.is_done = False
-    else:
-        task.is_done = True
-    task.save()
 
-    return HttpResponseRedirect(reverse_lazy('todolist_templates:index'))
+class ToggleDoneView(View):
+    def post(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+
+        task.is_done = not task.is_done
+        task.save(update_fields=["is_done"])
+
+        return redirect("todolist_templates:index")

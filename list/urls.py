@@ -9,7 +9,7 @@ from list.views import (
     DeleteTagsView,
     UpdateTaskView,
     DeleteTaskView,
-    toggle_done,
+    ToggleDoneView,
 
 )
 
@@ -17,7 +17,7 @@ app_name = 'list'
 
 urlpatterns = [
     path('', TodoListView.as_view(), name='index'),
-    path('toggle_status/<int:pk>/', toggle_done, name='toggle_status'),
+    path('toggle_status/<int:pk>/', ToggleDoneView.as_view(), name='toggle_status'),
 
     path('tags/', TagsListView.as_view(), name='tags'),
     path('tags/add/', AddTagsView.as_view(), name='add_tags'),

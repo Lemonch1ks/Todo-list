@@ -49,15 +49,19 @@
     </div>
 
     <div>
-      {% if task.is_done %}
-        <a href="{% url 'list:toggle_status' pk=task.pk %}" class="btn btn-secondary">
-          Undo
-        </a>
-      {% else %}
-        <a href="{% url 'list:toggle_status' pk=task.pk %}" class="btn btn-success">
-          Complete
-        </a>
-      {% endif %}
+      <form action="{% url 'todolist_templates:toggle_status' task.pk %}" method="post">
+        {% csrf_token %}
+
+        {% if task.is_done %}
+          <button type="submit" class="btn btn-secondary">
+            Undo
+          </button>
+        {% else %}
+          <button type="submit" class="btn btn-success">
+            Complete
+          </button>
+        {% endif %}
+      </form>
     </div>
 
   </div>
